@@ -1,311 +1,375 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>你的靈魂香氣測驗</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>禪心香氣覺察之旅</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap');
+
         :root {
-            --bg: #fdf8f3;
-            --primary: #52533e;
-            --secondary: #b58372;
-            --highlight: #d3733c;
-            --accent: #555845;
-            --font-serif: 'Noto Serif TC', serif;
-            --font-display: 'ZCOOL KuaiLe', cursive;
+            --fire-color: #e57373;
+            --water-color: #64b5f6;
+            --cloud-color: #90a4ae;
+            --rainbow-color: #ffd54f;
+            --text-color: #333;
+            --bg-color: #f7f3e9;
+            --transition-duration: 0.8s;
         }
+
         body {
-            font-family: var(--font-serif);
-            background-color: var(--bg);
-            color: var(--primary);
-            line-height: 1.6;
-            margin: 0;
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            margin: 0;
             padding: 20px;
             box-sizing: border-box;
+            line-height: 1.8;
+            letter-spacing: 0.5px;
         }
-        .card-container {
-            max-width: 600px;
+
+        #app {
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
             width: 100%;
-        }
-        .card {
-            background-color: white;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 40px;
             text-align: center;
-            animation: fadeInUp 1s forwards;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity var(--transition-duration) ease-out, transform var(--transition-duration) ease-out;
         }
+        
+        #app.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         h1, h2 {
-            font-family: var(--font-display);
-            color: var(--highlight);
+            font-weight: 700;
         }
-        .btn {
-            background-color: white;
-            color: var(--primary);
-            border: 2px solid var(--primary);
-            padding: 12px 25px;
-            font-size: 1em;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: var(--font-serif);
+
+        .intro, .question, .result {
+            opacity: 0;
+            transition: opacity var(--transition-duration) ease-in-out;
+            min-height: 400px;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
-        .btn.primary {
-            background-color: var(--primary);
-            color: white;
+
+        .active-section {
+            opacity: 1;
+            display: flex;
         }
-        .btn:hover {
-            background-color: var(--secondary);
-            color: white;
-            border-color: var(--secondary);
+
+        .question-title {
+            font-size: 1.6rem;
+            margin-bottom: 20px;
         }
-        .answers {
+
+        .question-options {
             display: flex;
             flex-direction: column;
+            width: 100%;
             gap: 15px;
+            margin-top: 20px;
+        }
+
+        .option-btn {
+            background-color: #f0ead6;
+            border: 2px solid transparent;
+            color: var(--text-color);
+            padding: 15px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
+            text-align: left;
+        }
+
+        .option-btn:hover {
+            background-color: #e8dcc3;
+            transform: translateY(-3px);
+        }
+
+        .start-btn {
+            background-color: var(--rainbow-color);
+            color: var(--text-color);
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .start-btn:hover {
+            transform: scale(1.05);
+            background-color: #e5c338;
+        }
+
+        .result-content {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .result-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .result-heading {
+            font-size: 2rem;
+            margin-top: 0;
+            color: var(--text-color);
+        }
+
+        .result-heading.fire { color: var(--fire-color); }
+        .result-heading.water { color: var(--water-color); }
+        .result-heading.cloud { color: var(--cloud-color); }
+        .result-heading.rainbow { color: var(--rainbow-color); }
+
+        .scent-recommendation {
+            background-color: #f7f7f7;
+            border-left: 5px solid;
+            padding: 20px;
             margin-top: 30px;
         }
-        .answer-btn {
-            width: 100%;
-            background-color: var(--bg);
-            border: 2px solid var(--secondary);
-            color: var(--primary);
-            padding: 15px;
-            font-size: 1em;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: left;
-            font-family: var(--font-serif);
-        }
-        .answer-btn:hover {
-            background-color: var(--secondary);
-            color: white;
-        }
-        .hidden {
-            display: none;
-        }
-        .result-desc-text strong {
-            color: var(--highlight);
-        }
-        .result-desc-text {
-            text-align: left;
-            margin-top: 20px;
-            line-height: 1.8;
-        }
-        @keyframes fadeInUp {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
+
+        .scent-recommendation.fire { border-color: var(--fire-color); }
+        .scent-recommendation.water { border-color: var(--water-color); }
+        .scent-recommendation.cloud { border-color: var(--cloud-color); }
+        .scent-recommendation.rainbow { border-color: var(--rainbow-color); }
+
     </style>
 </head>
 <body>
-    <main class="card-container">
-        <section id="intro" class="card">
-            <h1>心靈香氣 · 深度測驗</h1>
-            <p>香氣，是靈魂的語言。透過這個深度測驗，探索你當下最核心的能量原型，並獲得專屬於你的心靈指引。</p>
-            <button id="startBtn" class="btn primary">開始測驗</button>
-        </section>
 
-        <section id="quiz" class="card hidden">
-            <h2 id="questionTitle"></h2>
-            <div id="answers" class="answers"></div>
-            <p id="progressText"></p>
-        </section>
+<div id="app">
+    <div id="intro-section" class="intro active-section">
+        <h2>探索靈魂的四大元素：你的禪心香氣覺察之旅</h2>
+        <p>在奧修禪卡的智慧中，我們的內在由四大元素構成：火的熱情、水的流動、雲的心智、彩虹的靈性。此刻的你，正被哪一種能量所牽引？這場測驗將引導你進入內在的覺察，透過直覺的選擇，揭示你當下的核心狀態，並找到能滋養這份能量的香氛方向。</p>
+        <button id="start-btn" class="start-btn">開始探索</button>
+    </div>
 
-        <section id="result" class="card hidden">
-            <h2 id="resultTitle"></h2>
-            <div id="resultDescription"></div>
-            <button id="restartBtn" class="btn primary">再測一次</button>
-        </section>
-    </main>
-    
-    <script>
-        const quizData = {
-            questions: [
-                {
-                    title: "當你面對一個複雜的難題時，你會如何應對？",
-                    answers: [
-                        { text: "A. 我會整理思緒，尋找邏輯和規律。", type: "cloud" },
-                        { text: "B. 我會相信直覺，讓心去引導我。", type: "water" },
-                        { text: "C. 我會立刻行動，親手解決問題。", type: "fire" },
-                        { text: "D. 我會尋求實用的建議，腳踏實地解決。", type: "rainbow" }
-                    ]
-                },
-                {
-                    title: "你最欣賞哪一種生活狀態？",
-                    answers: [
-                        { text: "A. 簡約而有條理，思緒清晰不被干擾。", type: "cloud" },
-                        { text: "B. 情感豐富，與人有深刻的連結。", type: "water" },
-                        { text: "C. 充滿挑戰，不斷探索新的可能性。", type: "fire" },
-                        { text: "D. 穩定而踏實，享受生活中的小確幸。", type: "rainbow" }
-                    ]
-                },
-                {
-                    title: "你感到心靈疲憊時，會用什麼方式充電？",
-                    answers: [
-                        { text: "A. 獨處靜心，思考和寫作。", type: "cloud" },
-                        { text: "B. 沉浸在音樂或藝術中，讓情感流動。", type: "water" },
-                        { text: "C. 投入一場充滿能量的運動。", type: "fire" },
-                        { text: "D. 整理居家環境，讓外在空間恢復秩序。", type: "rainbow" }
-                    ]
-                },
-                {
-                    title: "哪一種自然元素最能代表你的內在？",
-                    answers: [
-                        { text: "A. 無拘無束的風，輕盈而自由。", type: "cloud" },
-                        { text: "B. 溫柔且具包容性的水，能適應任何容器。", type: "water" },
-                        { text: "C. 炙熱而充滿創造力的火焰。", type: "fire" },
-                        { text: "D. 踏實穩固的大地，紮根且豐盛。", type: "rainbow" }
-                    ]
-                }
-            ],
-            results: {
-                cloud: {
-                    title: "木質調 — 靜心之徑",
-                    description: `
-                        <strong>心靈原型：風（雲）</strong><br>
-                        你擁有清晰的思緒與獨立的智慧，就像高掛天際的雲，不受束縛，自由地流動。你的內在正尋求一份全然的安靜與澄澈，渴望透過思考與覺察，抵達真正的平靜。
-                        <br><br>
-                        <strong>奧修禪卡指引：</strong>『靜心』與『覺知』<br>
-                        這兩張牌提醒你，真正的力量來自於內在的觀照。你不需要向外尋找答案，因為所有的智慧都已在你心中。
-                        <br><br>
-                        <strong>香氛建議：</strong>檀香、雪松、迷迭香<br>
-                        這些香氣能為你創造一個穩定的靜心空間，幫助你紮根於當下，讓心靈像一片晴朗的天空般澄澈。
-                    `
-                },
-                water: {
-                    title: "花香調 — 療癒之泉",
-                    description: `
-                        <strong>心靈原型：水</strong><br>
-                        你的心是一片廣闊的海洋，情感豐富且極具包容性。你擁有與生俱來的直覺與同理心，能夠感受他人與自己的情緒。你正學習如何讓情緒流動，而不是將其困住。
-                        <br><br>
-                        <strong>奧修禪卡指引：</strong>『內在之聲』與『讓它去』<br>
-                        這兩張牌鼓勵你信任你的直覺，並允許自己去感受所有情緒。真正的療癒始於愛與接納，流動的心靈才能找到平靜。
-                        <br><br>
-                        <strong>香氛建議：</strong>玫瑰、茉莉、橙花<br>
-                        這些香氣能像輕柔的流水般，安撫你緊繃的神經，並滋養你的心靈，讓你感到被愛與支持。
-                    `
-                },
-                fire: {
-                    title: "辛香調 — 啟程的火焰",
-                    description: `
-                        <strong>心靈原型：火</strong><br>
-                        你充滿了勇氣、熱情與行動力。你的內在之火正熊熊燃燒，驅使你不斷向前探索與創造。你正站在一個充滿潛力與新冒險的起點，準備好將靈感轉化為實際的行動。
-                        <br><br>
-                        <strong>奧修禪卡指引：</strong>『勇氣』與『蛻變』<br>
-                        這兩張牌提醒你，真正的勇氣不是無所畏懼，而是帶著感受向前。你正經歷一場深刻的轉變，這份熱情將引領你前往更高層次的生命。
-                        <br><br>
-                        <strong>香氛建議：</strong>佛手柑、生薑、葡萄柚<br>
-                        這些香氣能為你注入活力與熱情，提醒你生命的冒險充滿了喜悅與力量。
-                    `
-                },
-                rainbow: {
-                    title: "土質調 — 豐盛之林",
-                    description: `
-                        <strong>心靈原型：土（彩虹）</strong><br>
-                        你尋求一種深刻的穩定感，腳踏實地且務實。你與大自然有著深刻的連結，懂得如何從最平凡的事物中汲取力量。你正學習信任生命中的豐盛，並活在當下。
-                        <br><br>
-                        <strong>奧修禪卡指引：</strong>『豐盛』與『完整』<br>
-                        這兩張牌提醒你，真正的豐盛來自於你與大地的連結。當你與自己的根源相連，你便能體驗到生命中的富足與圓滿。
-                        <br><br>
-                        <strong>香氛建議：</strong>岩蘭草、廣藿香、琥珀<br>
-                        這些香氣能為你提供堅實的支撐，讓你感到腳踏實地，並從中獲得平靜與安穩。
-                    `
-                }
+    <div id="question-section" class="question">
+        <div id="question-text" class="question-title"></div>
+        <div id="options-container" class="question-options"></div>
+    </div>
+
+    <div id="result-section" class="result">
+        <div id="result-content" class="result-content"></div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const app = document.getElementById('app');
+        const introSection = document.getElementById('intro-section');
+        const questionSection = document.getElementById('question-section');
+        const resultSection = document.getElementById('result-section');
+        const startBtn = document.getElementById('start-btn');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const resultContent = document.getElementById('result-content');
+
+        let currentQuestionIndex = 0;
+        let userChoices = []; 
+
+        const questions = [
+            {
+                text: "1. 在你的內心，你此刻最能感知到的能量是什麼？",
+                options: [
+                    { text: "A. 一股炙熱、充滿活力的能量，像燃燒的火焰。", value: 'fire' },
+                    { text: "B. 一股柔和、充滿情感的能量，像流動的河水。", value: 'water' },
+                    { text: "C. 一股清晰、充滿思考的能量，像飄渺的雲霧。", value: 'cloud' },
+                    { text: "D. 一股溫暖、充滿平靜的能量，像雨後的彩虹。", value: 'rainbow' }
+                ]
+            },
+            {
+                text: "2. 當你身心疲憊時，你的心最需要哪一種聲音？",
+                options: [
+                    { text: "A. 充滿節奏感、鼓舞人心的音樂。", value: 'fire' },
+                    { text: "B. 溫柔安靜、撫慰人心的輕柔音樂。", value: 'water' },
+                    { text: "C. 沒有聲音，只有清晰的思考。", value: 'cloud' },
+                    { text: "D. 寧靜的自然聲響，如風聲與水聲。", value: 'rainbow' }
+                ]
+            },
+            {
+                text: "3. 面對未來的挑戰時，你的心最想如何應對？",
+                options: [
+                    { text: "A. 立刻採取行動，熱情地迎向挑戰。", value: 'fire' },
+                    { text: "B. 順其自然，讓事情自然發展。", value: 'water' },
+                    { text: "C. 仔細分析，制定周密的計畫。", value: 'cloud' },
+                    { text: "D. 保持平靜，相信一切自有安排。", value: 'rainbow' }
+                ]
+            },
+            {
+                text: "4. 如果你的情緒是一片風景，此刻最接近哪一種？",
+                options: [
+                    { text: "A. 熾熱的沙漠，充滿激情。", value: 'fire' },
+                    { text: "B. 寧靜的湖泊，平靜而深邃。", value: 'water' },
+                    { text: "C. 變幻莫測的天空，思緒飛舞。", value: 'cloud' },
+                    { text: "D. 雨後的彩虹，充滿希望。", value: 'rainbow' }
+                ]
+            },
+            {
+                text: "5. 在與人連結時，你目前最渴望的能量是什麼？",
+                options: [
+                    { text: "A. 直接且充滿活力的交流。", value: 'fire' },
+                    { text: "B. 溫柔且充滿同理心的傾聽。", value: 'water' },
+                    { text: "C. 清晰且充滿智慧的對話。", value: 'cloud' },
+                    { text: "D. 無聲且充滿靈性的陪伴。", value: 'rainbow' }
+                ]
+            },
+            {
+                text: "6. 你的內心深處，最想釋放掉的是什麼？",
+                options: [
+                    { text: "A. 缺乏行動力的惰性。", value: 'fire' },
+                    { text: "B. 累積在內心的情緒。", value: 'water' },
+                    { text: "C. 過多的思考與煩惱。", value: 'cloud' },
+                    { text: "D. 對生命的不信任。", value: 'rainbow' }
+                ]
+            }
+        ];
+
+        const results = {
+            'fire': {
+                title: "你，是充滿熱情的行動者。",
+                image: "images/result_fire.png", // **請替換為您的圖片路徑**
+                analysis: `
+                    <p><strong>你此刻的能量，是『行動』與『熱情』。</strong></p>
+                    <p>你對「火焰」與「熱情」的強烈共鳴，揭示了你內在之火正在燃燒，渴望將想法化為實際行動。這是一個充滿創造與活力的時刻，請相信你的力量，並勇敢地去追求你所渴望的一切。</p>
+                    <p><strong>奧修禪卡要告訴你的：</strong>你是一個天生的領導者與啟動者。不要害怕冒險，你的熱情將會為你開闢新的道路。將這份能量穩穩地扎根，讓它成為你持續前行的動力。</p>
+                `,
+                scent: `
+                    <p><strong>最能滋養你的香氛方向：</strong> <strong>「辛辣、木質與溫暖調」</strong>。這類香調能激發你內在的力量，如陽光般的柑橘與辛辣的香料，能點燃你的熱情；而穩定的木質香，則能幫助你將這份能量穩穩地扎根。</p>
+                `
+            },
+            'water': {
+                title: "你，是平靜而深邃的內省者。",
+                image: "images/result_water.png", // **請替換為您的圖片路徑**
+                analysis: `
+                    <p><strong>你此刻的能量，是『情感』與『流動』。</strong></p>
+                    <p>你的內在世界如同大海，充滿了情感與直覺。你是一個富有同理心的人，此刻正需要與你的情感連結。放下所有批判，允許自己去感受，你會發現內心的流動將帶給你無限的智慧與平靜。</p>
+                    <p><strong>奧修禪卡要告訴你的：</strong>你的力量來自於你的情感深度。學會信任你的直覺，它將會引導你走向正確的方向。請給自己多一點靜默與獨處的時間，滋養你的內在世界。</p>
+                `,
+                scent: `
+                    <p><strong>最能滋養你的香氛方向：</strong> <strong>「柔和、花香與海洋調」</strong>。這類香調能安撫你的情緒，如溫柔的花香能帶來療癒；而清新的海洋調，則能幫助你擁抱情感的流動，找到內心的平靜。</p>
+                `
+            },
+            'cloud': {
+                title: "你，是充滿智慧的覺察者。",
+                image: "images/result_cloud.png", // **請替換為您的圖片路徑**
+                analysis: `
+                    <p><strong>你此刻的能量，是『心智』與『覺察』。</strong></p>
+                    <p>你擁有清晰的思維與深刻的洞察力。此刻的你，正需要回到自己的中心，靜心思考，釐清內心的雜訊。這是一個自我覺察的時刻，當你將所有混亂的思緒理清後，將會看見更清晰的道路。</p>
+                    <p><strong>奧修禪卡要告訴你的：</strong>你的心智是你的工具，而不是你的主人。學會觀察而不執著，讓思緒像雲一樣自由飄動，你會發現心靈的空間會變得更寬廣。</p>
+                `,
+                scent: `
+                    <p><strong>最能滋養你的香氛方向：</strong> <strong>「清新、草本與純淨」</strong>。這類香調能淨化你的思緒，如清新的草本香能帶來清明；而純淨的白花香，則能幫助你找到內心的平靜，專注於當下。</p>
+                `
+            },
+            'rainbow': {
+                title: "你，是充滿希望的靈性者。",
+                image: "images/result_rainbow.png", // **請替換為您的圖片路徑**
+                analysis: `
+                    <p><strong>你此刻的能量，是『靈性』與『新生』。</strong></p>
+                    <p>你正處於一個靈性成長的階段，內在充滿了希望與信任。你相信生命是一個奇蹟，並能從中找到喜悅。這是一個充滿愛的時刻，當你將這份喜悅分享給他人時，你也會得到更多的滋養。</p>
+                    <p><strong>奧修禪卡要告訴你的：</strong>你的存在本身就是一份禮物。當你將內在的喜悅與平靜分享給他人時，你也會得到更多的滋養。信任生命中的每一次安排，因為一切都在朝著美好的方向發展。</p>
+                `,
+                scent: `
+                    <p><strong>最能滋養你的香氛方向：</strong> <strong>「溫暖、甜美與果香調」</strong>。這類香調能呼應你內在的喜悅，如溫暖的果香能帶來甜蜜；而充滿希望感的香氣，則能幫助你將這份能量傳遞出去，與身邊的人分享。</p>
+                `
             }
         };
 
-        // DOM elements
-        const introSection = document.getElementById('intro');
-        const quizSection = document.getElementById('quiz');
-        const resultSection = document.getElementById('result');
-        const startBtn = document.getElementById('startBtn');
-        const questionTitleEl = document.getElementById('questionTitle');
-        const answersDiv = document.getElementById('answers');
-        const progressEl = document.getElementById('progressText');
-        const resultTitleEl = document.getElementById('resultTitle');
-        const resultDescriptionEl = document.getElementById('resultDescription');
-        const restartBtn = document.getElementById('restartBtn');
+        // 啟動測驗
+        startBtn.addEventListener('click', () => {
+            introSection.classList.remove('active-section');
+            setTimeout(() => {
+                introSection.style.display = 'none';
+                questionSection.classList.add('active-section');
+                renderQuestion();
+            }, 800);
+        });
 
-        // Quiz state
-        let currentQuestionIndex = 0;
-        const scores = { cloud: 0, water: 0, fire: 0, rainbow: 0 };
-
-        function showQuestion() {
-            if (currentQuestionIndex < quizData.questions.length) {
-                const currentQuestion = quizData.questions[currentQuestionIndex];
-                questionTitleEl.textContent = currentQuestion.title;
-                answersDiv.innerHTML = '';
-                currentQuestion.answers.forEach(answer => {
+        // 渲染問題
+        function renderQuestion() {
+            if (currentQuestionIndex < questions.length) {
+                const question = questions[currentQuestionIndex];
+                questionText.textContent = question.text;
+                optionsContainer.innerHTML = '';
+                question.options.forEach(option => {
                     const button = document.createElement('button');
-                    button.classList.add('answer-btn');
-                    button.textContent = answer.text;
-                    button.dataset.type = answer.type;
-                    answersDiv.appendChild(button);
+                    button.textContent = option.text;
+                    button.classList.add('option-btn');
+                    button.addEventListener('click', () => handleAnswer(option.value));
+                    optionsContainer.appendChild(button);
                 });
-                progressEl.textContent = `第 ${currentQuestionIndex + 1} 題 / ${quizData.questions.length} 題`;
             } else {
                 showResult();
             }
         }
 
-        function handleAnswerClick(event) {
-            const selectedType = event.target.dataset.type;
-            if (selectedType) {
-                scores[selectedType]++;
-                currentQuestionIndex++;
-                showQuestion();
-            }
+        // 處理答案
+        function handleAnswer(value) {
+            userChoices.push(value);
+            currentQuestionIndex++;
+            
+            questionSection.style.opacity = 0;
+            setTimeout(() => {
+                renderQuestion();
+                questionSection.style.opacity = 1;
+            }, 500);
         }
 
-        function calculateResult() {
-            let maxType = '';
-            let maxScore = 0;
-            for (const type in scores) {
-                if (scores[type] > maxScore) {
-                    maxScore = scores[type];
-                    maxType = type;
+        // 顯示結果
+        function showResult() {
+            const counts = userChoices.reduce((acc, choice) => {
+                acc[choice] = (acc[choice] || 0) + 1;
+                return acc;
+            }, {});
+
+            let dominantTrait = 'rainbow'; // 預設值
+            let maxCount = 0;
+            for (const trait in counts) {
+                if (counts[trait] > maxCount) {
+                    maxCount = counts[trait];
+                    dominantTrait = trait;
                 }
             }
-            return quizData.results[maxType];
+            
+            const result = results[dominantTrait];
+            const html = `
+                <h2 class="result-heading ${dominantTrait}">${result.title}</h2>
+                <img src="${result.image}" alt="Result Image" class="result-image">
+                ${result.analysis}
+                <div class="scent-recommendation ${dominantTrait}">
+                    ${result.scent}
+                </div>
+            `;
+            
+            questionSection.classList.remove('active-section');
+            setTimeout(() => {
+                questionSection.style.display = 'none';
+                resultSection.classList.add('active-section');
+                resultContent.innerHTML = html;
+            }, 800);
         }
 
-        function showResult() {
-            quizSection.classList.add('hidden');
-            resultSection.classList.remove('hidden');
-            const finalResult = calculateResult();
-            resultTitleEl.textContent = finalResult.title;
-            resultDescriptionEl.innerHTML = finalResult.description;
-        }
+        app.classList.add('visible');
+    });
+</script>
 
-        function resetQuiz() {
-            currentQuestionIndex = 0;
-            for (const key in scores) {
-                scores[key] = 0;
-            }
-            resultSection.classList.add('hidden');
-            introSection.classList.remove('hidden');
-        }
-
-        // Event listeners
-        startBtn.addEventListener('click', () => {
-            introSection.classList.add('hidden');
-            quizSection.classList.remove('hidden');
-            showQuestion();
-        });
-        
-        answersDiv.addEventListener('click', handleAnswerClick);
-        restartBtn.addEventListener('click', resetQuiz);
-
-    </script>
 </body>
 </html>
