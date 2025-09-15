@@ -439,6 +439,7 @@
                 analysis: `
                     <p><strong>你此刻的能量，是『心智』與『覺察』。</strong></p>
                     <p>你擁有清晰的思維與深刻的洞察力。此刻的你，正需要回到自己的中心，靜心思考，釐清內心的雜訊。這是一個自我覺察的時刻，當你將所有混亂的思緒理清後，將會看見更清晰的道路。</p>
+                    <p><strong>奧修禪卡要告訴你的：</strong>你的心智是你的工具，而不是你的主人。學會觀察而不執著，讓思緒像雲一樣自由飄動，你會發現心靈的空間會變得更寬廣。</p>
                 `,
                 scent: `
                     <p><strong>最能滋養你的香氛方向：</strong> <strong>「清新、草本與純淨」</strong>。這類香調能淨化你的思緒，如清新的草本香能帶來清明；而純淨的白花香，則能幫助你找到內心的平靜，專注於當下。</p>
@@ -450,6 +451,7 @@
                 analysis: `
                     <p><strong>你此刻的能量，是『靈性』與『新生』。</strong></p>
                     <p>你正處於一個靈性成長的階段，內在充滿了希望與信任。你相信生命是一個奇蹟，並能從中找到喜悅。這是一個充滿愛的時刻，當你將這份喜悅分享給他人時，你也會得到更多的滋養。</p>
+                    <p><strong>奧修禪卡要告訴你的：</strong>你的存在本身就是一份禮物。當你將內在的喜悅與平靜分享給他人時，你也會得到更多的滋養。信任生命中的每一次安排，因為一切都在朝著美好的方向發展。</p>
                 `,
                 scent: `
                     <p><strong>最能滋養你的香氛方向：</strong> <strong>「溫暖、甜美與果香調」</strong>。這類香調能呼應你內在的喜悅，如溫暖的果香能帶來甜蜜；而充滿希望感的香氣，則能幫助你將這份能量傳遞出去，與身邊的人分享。</p>
@@ -464,7 +466,6 @@
         };
 
         const handleDOMContentLoaded = () => {
-            // 頁面載入後，先顯示主要容器，然後再依序觸發首頁動畫
             app.classList.add('visible');
             setTimeout(() => {
                 introSection.classList.add('active-section');
@@ -472,7 +473,6 @@
         };
         document.addEventListener('DOMContentLoaded', handleDOMContentLoaded);
 
-        // 打字機效果函數
         const typeWriter = (element, text, delay = 80) => {
             let i = 0;
             element.textContent = '';
@@ -492,7 +492,6 @@
             });
         };
         
-        // 切換頁面函數
         const switchSection = (current, next) => {
             if (current) sections[current].classList.remove('active-section');
             setTimeout(() => {
@@ -502,20 +501,17 @@
             }, 800);
         };
 
-        // 啟動測驗
         startBtn.addEventListener('click', () => {
             switchSection('intro', 'question');
             setTimeout(renderQuestion, 900);
         });
 
-        // 重新啟動測驗
         restartBtn.addEventListener('click', () => {
             currentQuestionIndex = 0;
             userChoices = [];
             switchSection('result', 'intro');
         });
 
-        // 分享功能
         shareBtn.addEventListener('click', () => {
             const resultTitle = document.querySelector('.result-heading').textContent;
             const resultText = `我在「${document.title}」測驗中發現了我的靈魂香氣！我的能量是「${resultTitle.replace('你，是', '').replace('。', '')}」，你呢？快來探索你的內在元素吧！`;
@@ -536,7 +532,6 @@
             }
         });
 
-        // 渲染問題
         function renderQuestion() {
             if (currentQuestionIndex < questions.length) {
                 const question = questions[currentQuestionIndex];
@@ -565,7 +560,6 @@
             }
         }
 
-        // 處理答案
         function handleAnswer(value) {
             userChoices.push(value);
             currentQuestionIndex++;
@@ -583,7 +577,6 @@
             }, 800);
         }
 
-        // 顯示結果
         function showResult() {
             const counts = userChoices.reduce((acc, choice) => {
                 acc[choice] = (acc[choice] || 0) + 1;
