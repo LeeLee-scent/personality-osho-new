@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>禪心香氣覺察之旅</title>
     <style>
+        /* 引入 Google Fonts */
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap');
 
+        /* 定義主題顏色與變數 */
         :root {
             --fire-color: #e57373;
             --water-color: #64b5f6;
@@ -18,6 +20,7 @@
             --container-bg-color: rgba(255, 255, 255, 0.8);
         }
 
+        /* 全局與背景設定 */
         body {
             font-family: 'Noto Sans TC', sans-serif;
             background: linear-gradient(135deg, #e0eafc, #cfdef3);
@@ -30,7 +33,7 @@
             box-sizing: border-box;
             line-height: 1.8;
             letter-spacing: 0.5px;
-            overflow: hidden; 
+            overflow: hidden;
             position: relative;
         }
 
@@ -50,14 +53,11 @@
         }
 
         @keyframes pan-background {
-            0% {
-                transform: translate(0, 0);
-            }
-            100% {
-                transform: translate(5%, 5%);
-            }
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(5%, 5%); }
         }
-        
+
+        /* 主要容器樣式與動畫 */
         #app {
             background-color: var(--container-bg-color);
             backdrop-filter: blur(10px);
@@ -67,7 +67,7 @@
             width: 100%;
             padding: 40px;
             text-align: center;
-            opacity: 0;
+            opacity: 0; /* 初始狀態隱藏 */
             transform: translateY(20px);
             transition: opacity var(--transition-duration) ease-out, transform var(--transition-duration) ease-out;
             display: flex;
@@ -75,12 +75,13 @@
             justify-content: center;
             align-items: center;
         }
-        
+
         #app.visible {
             opacity: 1;
             transform: translateY(0);
         }
 
+        /* 元素動畫與初始狀態 */
         .brand-logo {
             margin-bottom: 20px;
             opacity: 0;
@@ -95,17 +96,15 @@
             transition: opacity 0.3s ease;
         }
         
-        .brand-logo img:hover {
-            opacity: 1;
-        }
+        .brand-logo img:hover { opacity: 1; }
 
         h1, h2, p, .start-btn {
             opacity: 0;
             transform: translateY(20px);
             transition: opacity 0.6s ease, transform 0.6s ease;
         }
-        
-        /* 首頁動畫效果 */
+
+        /* 首頁動畫觸發 */
         #intro-section.active-section .brand-logo {
             opacity: 1;
             transform: translateY(0);
@@ -133,10 +132,11 @@
             100% { transform: scale(1); }
         }
 
+        /* 區塊顯示邏輯 */
         .intro, .question, .result {
             min-height: 400px;
-            width: 100%; 
-            display: none;
+            width: 100%;
+            display: none; /* 初始狀態隱藏 */
             flex-direction: column;
             justify-content: center;
             align-items: center;
@@ -149,11 +149,12 @@
             opacity: 1;
         }
 
+        /* 問題頁面樣式 */
         .question-title {
             font-size: 1.6rem;
             margin-bottom: 20px;
             min-height: 50px;
-            opacity: 0; 
+            opacity: 0;
         }
 
         .question-options {
@@ -185,6 +186,7 @@
             border-color: var(--text-color);
         }
 
+        /* 開始按鈕樣式 */
         .start-btn {
             background-color: var(--rainbow-color);
             color: var(--text-color);
@@ -201,35 +203,38 @@
             background-color: #e5c338;
         }
 
+        /* 結果頁面樣式 */
         .result-content {
             margin-top: 20px;
             text-align: left;
             opacity: 0;
             transition: opacity 1.5s ease-in;
-            max-height: calc(100vh - 200px); 
-            overflow-y: auto; 
-            padding-right: 15px; 
-            box-sizing: border-box; 
-            width: 100%; 
+            max-height: calc(100vh - 200px);
+            overflow-y: auto;
+            padding-right: 15px;
+            box-sizing: border-box;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .result-content.is-visible {
-            opacity: 1;
-        }
+        .result-content.is-visible { opacity: 1; }
 
         .result-image {
-            max-width: 100%;
-            max-height: 250px; 
-            width: auto; 
-            object-fit: contain; 
+            max-width: 80%;
+            max-height: 250px;
+            width: auto;
+            object-fit: contain;
             border-radius: 10px;
-            margin-bottom: 20px;
+            margin: 0 auto 20px auto;
         }
 
         .result-heading {
             font-size: 2rem;
             margin-top: 0;
             color: var(--text-color);
+            text-align: center;
         }
 
         .result-heading.fire { color: var(--fire-color); }
@@ -243,6 +248,7 @@
             padding: 20px;
             margin-top: 30px;
             backdrop-filter: blur(5px);
+            text-align: left;
         }
 
         .scent-recommendation.fire { border-color: var(--fire-color); }
@@ -308,7 +314,7 @@
         <img src="./images/your-logo.png" alt="Brand Logo">
     </div>
 
-    <div id="intro-section" class="intro active-section">
+    <div id="intro-section" class="intro">
         <h2>探索靈魂的四大元素：你的禪心香氣覺察之旅</h2>
         <p>在奧修禪卡的智慧中，我們的內在由四大元素構成：火的熱情、水的流動、雲的心智、彩虹的靈性。此刻的你，正被哪一種能量所牽引？這場測驗將引導你進入內在的覺察，透過直覺的選擇，揭示你當下的核心狀態，並找到能滋養這份能量的香氛方向。</p>
         <button id="start-btn" class="start-btn">開始探索</button>
@@ -343,7 +349,7 @@
 
         let currentQuestionIndex = 0;
         let userChoices = []; 
-        const TYPING_SPEED = 80; // 調整打字速度，數值越大越慢
+        const TYPING_SPEED = 80;
 
         const questions = [
             {
@@ -433,7 +439,6 @@
                 analysis: `
                     <p><strong>你此刻的能量，是『心智』與『覺察』。</strong></p>
                     <p>你擁有清晰的思維與深刻的洞察力。此刻的你，正需要回到自己的中心，靜心思考，釐清內心的雜訊。這是一個自我覺察的時刻，當你將所有混亂的思緒理清後，將會看見更清晰的道路。</p>
-                    <p><strong>奧修禪卡要告訴你的：</strong>你的心智是你的工具，而不是你的主人。學會觀察而不執著，讓思緒像雲一樣自由飄動，你會發現心靈的空間會變得更寬廣。</p>
                 `,
                 scent: `
                     <p><strong>最能滋養你的香氛方向：</strong> <strong>「清新、草本與純淨」</strong>。這類香調能淨化你的思緒，如清新的草本香能帶來清明；而純淨的白花香，則能幫助你找到內心的平靜，專注於當下。</p>
@@ -445,7 +450,6 @@
                 analysis: `
                     <p><strong>你此刻的能量，是『靈性』與『新生』。</strong></p>
                     <p>你正處於一個靈性成長的階段，內在充滿了希望與信任。你相信生命是一個奇蹟，並能從中找到喜悅。這是一個充滿愛的時刻，當你將這份喜悅分享給他人時，你也會得到更多的滋養。</p>
-                    <p><strong>奧修禪卡要告訴你的：</strong>你的存在本身就是一份禮物。當你將內在的喜悅與平靜分享給他人時，你也會得到更多的滋養。信任生命中的每一次安排，因為一切都在朝著美好的方向發展。</p>
                 `,
                 scent: `
                     <p><strong>最能滋養你的香氛方向：</strong> <strong>「溫暖、甜美與果香調」</strong>。這類香調能呼應你內在的喜悅，如溫暖的果香能帶來甜蜜；而充滿希望感的香氣，則能幫助你將這份能量傳遞出去，與身邊的人分享。</p>
@@ -458,9 +462,18 @@
             question: questionSection,
             result: resultSection
         };
-        
+
+        const handleDOMContentLoaded = () => {
+            // 頁面載入後，先顯示主要容器，然後再依序觸發首頁動畫
+            app.classList.add('visible');
+            setTimeout(() => {
+                introSection.classList.add('active-section');
+            }, 500);
+        };
+        document.addEventListener('DOMContentLoaded', handleDOMContentLoaded);
+
         // 打字機效果函數
-        const typeWriter = (element, text, delay = TYPING_SPEED) => {
+        const typeWriter = (element, text, delay = 80) => {
             let i = 0;
             element.textContent = '';
             element.classList.add('typing');
@@ -601,8 +614,6 @@
                 resultContent.classList.add('is-visible');
             }, 1000); 
         }
-
-        app.classList.add('visible');
     });
 </script>
 
