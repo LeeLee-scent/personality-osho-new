@@ -114,7 +114,7 @@
         .question-title {
             font-size: 1.6rem;
             margin-bottom: 20px;
-            min-height: 50px; /* 防止打字機效果時的畫面跳動 */
+            min-height: 50px;
         }
 
         .question-options {
@@ -290,6 +290,7 @@
 
         let currentQuestionIndex = 0;
         let userChoices = []; 
+        const TYPING_SPEED = 80; // 調整打字速度，數值越大越慢
 
         const questions = [
             {
@@ -406,19 +407,22 @@
         };
 
         // 打字機效果函數
-        const typeWriter = (element, text, delay = 50) => {
+        const typeWriter = (element, text, delay = TYPING_SPEED) => {
             let i = 0;
             element.textContent = '';
             element.classList.add('typing');
-            const interval = setInterval(() => {
-                if (i < text.length) {
-                    element.textContent += text.charAt(i);
-                    i++;
-                } else {
-                    clearInterval(interval);
-                    element.classList.remove('typing');
-                }
-            }, delay);
+            return new Promise(resolve => {
+                const interval = setInterval(() => {
+                    if (i < text.length) {
+                        element.textContent += text.charAt(i);
+                        i++;
+                    } else {
+                        clearInterval(interval);
+                        element.classList.remove('typing');
+                        resolve();
+                    }
+                }, delay);
+            });
         };
         
         // 切換頁面函數
@@ -446,7 +450,8 @@
 
         // 分享功能
         shareBtn.addEventListener('click', () => {
-            const resultText = `我在「${document.title}」測驗中發現了我的靈魂香氣！我的能量是「${document.querySelector('.result-heading').textContent.replace('你，是', '').replace('。', '')}」，你呢？快來探索你的內在元素吧！`;
+            const resultTitle = document.querySelector('.result-heading').textContent;
+            const resultText = `我在「${document.title}」測驗中發現了我的靈魂香氣！我的能量是「${resultTitle.replace('你，是', '').replace('。', '')}」，你呢？快來探索你的內在元素吧！`;
             const shareUrl = window.location.href;
             
             if (navigator.share) {
@@ -468,14 +473,15 @@
         function renderQuestion() {
             if (currentQuestionIndex < questions.length) {
                 const question = questions[currentQuestionIndex];
-                typeWriter(questionText, question.text);
-                optionsContainer.innerHTML = '';
-                question.options.forEach(option => {
-                    const button = document.createElement('button');
-                    button.textContent = option.text;
-                    button.classList.add('option-btn');
-                    button.addEventListener('click', () => handleAnswer(option.value));
-                    optionsContainer.appendChild(button);
+                typeWriter(questionText, question.text).then(() => {
+                    optionsContainer.innerHTML = '';
+                    question.options.forEach(option => {
+                        const button = document.createElement('button');
+                        button.textContent = option.text;
+                        button.classList.add('option-btn');
+                        button.addEventListener('click', () => handleAnswer(option.value));
+                        optionsContainer.appendChild(button);
+                    });
                 });
             } else {
                 showResult();
@@ -512,24 +518,15 @@
             
             const result = results[dominantTrait];
             resultContent.innerHTML = `
-                <h2 class="result-heading ${dominantTrait}"></h2>
+                <h2 class="result-heading ${dominantTrait}">${result.title}</h2>
                 <img src="${result.image}" alt="Result Image" class="result-image">
-                <div class="result-analysis-text"></div>
+                ${result.analysis}
                 <div class="scent-recommendation ${dominantTrait}">
-                    <div class="scent-recommendation-text"></div>
+                    ${result.scent}
                 </div>
             `;
             
-            const resultHeading = resultContent.querySelector('.result-heading');
-            const resultAnalysisText = resultContent.querySelector('.result-analysis-text');
-            const scentRecommendationText = resultContent.querySelector('.scent-recommendation-text');
-
             switchSection('question', 'result');
-            setTimeout(() => {
-                typeWriter(resultHeading, result.title);
-                setTimeout(() => typeWriter(resultAnalysisText, result.analysis.trim()), result.title.length * 50 + 500);
-                setTimeout(() => typeWriter(scentRecommendationText, result.scent.trim()), result.title.length * 50 + result.analysis.length * 50 + 1000);
-            }, 900);
         }
 
         app.classList.add('visible');
