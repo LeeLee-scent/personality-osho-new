@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>禪心香氣覺察之旅</title>
-    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap');
 
@@ -42,7 +41,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: #cfdef3; 
+            background-image: url('https://images.unsplash.com/photo-1542436152-337d1d234a41');
             background-size: cover;
             background-position: center;
             filter: blur(5px);
@@ -51,10 +50,14 @@
         }
 
         @keyframes pan-background {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(5%, 5%); }
+            0% {
+                transform: translate(0, 0);
+            }
+            100% {
+                transform: translate(5%, 5%);
+            }
         }
-
+        
         #app {
             background-color: var(--container-bg-color);
             backdrop-filter: blur(10px);
@@ -67,87 +70,51 @@
             opacity: 0;
             transform: translateY(20px);
             transition: opacity var(--transition-duration) ease-out, transform var(--transition-duration) ease-out;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
         }
-
+        
         #app.visible {
             opacity: 1;
             transform: translateY(0);
         }
 
-        .leelee-logo {
+        .brand-logo {
             margin-bottom: 20px;
-            opacity: 0;
-            transform: translateY(-20px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
         }
 
-        .leelee-logo img {
+        .brand-logo img {
             max-width: 150px;
             height: auto;
             opacity: 0.8;
             transition: opacity 0.3s ease;
         }
         
-        .leelee-logo img:hover { opacity: 1; }
-
-        h1, h2, p, .start-btn {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
+        .brand-logo img:hover {
+            opacity: 1;
         }
 
-        #intro-section.active-section .leelee-logo {
-            opacity: 1;
-            transform: translateY(0);
-            transition-delay: 0.2s;
-        }
-        #intro-section.active-section h2 {
-            opacity: 1;
-            transform: translateY(0);
-            transition-delay: 0.4s;
-        }
-        #intro-section.active-section p {
-            opacity: 1;
-            transform: translateY(0);
-            transition-delay: 0.6s;
-        }
-        #intro-section.active-section .start-btn {
-            opacity: 1;
-            animation: bounceIn 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
-            animation-delay: 1.0s;
-        }
-
-        @keyframes bounceIn {
-            0% { transform: scale(0); opacity: 0; }
-            50% { transform: scale(1.1); opacity: 1; }
-            100% { transform: scale(1); }
+        h1, h2 {
+            font-weight: 700;
         }
 
         .intro, .question, .result {
+            opacity: 0;
+            transition: opacity var(--transition-duration) ease-in-out;
             min-height: 400px;
-            width: 100%;
             display: none;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            transition: opacity var(--transition-duration) ease-in-out;
-            position: relative;
         }
 
         .active-section {
-            display: flex;
             opacity: 1;
+            display: flex;
         }
 
         .question-title {
             font-size: 1.6rem;
             margin-bottom: 20px;
             min-height: 50px;
-            opacity: 0;
         }
 
         .question-options {
@@ -166,11 +133,9 @@
             border-radius: 10px;
             cursor: pointer;
             font-size: 1rem;
+            transition: background-color 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
             text-align: left;
             backdrop-filter: blur(5px);
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
         }
 
         .option-btn:hover {
@@ -187,6 +152,7 @@
             border-radius: 50px;
             font-size: 1.2rem;
             cursor: pointer;
+            transition: transform 0.3s ease, background-color 0.3s ease;
             font-weight: bold;
         }
 
@@ -198,34 +164,19 @@
         .result-content {
             margin-top: 20px;
             text-align: left;
-            opacity: 0;
-            transition: opacity 1.5s ease-in;
-            max-height: calc(100vh - 200px);
-            overflow-y: auto;
-            padding-right: 15px;
-            box-sizing: border-box;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
         }
 
-        .result-content.is-visible { opacity: 1; }
-
         .result-image {
-            max-width: 80%;
-            max-height: 250px;
-            width: auto;
-            object-fit: contain;
+            max-width: 100%;
+            height: auto;
             border-radius: 10px;
-            margin: 0 auto 20px auto;
+            margin-bottom: 20px;
         }
 
         .result-heading {
             font-size: 2rem;
             margin-top: 0;
             color: var(--text-color);
-            text-align: center;
         }
 
         .result-heading.fire { color: var(--fire-color); }
@@ -239,7 +190,6 @@
             padding: 20px;
             margin-top: 30px;
             backdrop-filter: blur(5px);
-            text-align: left;
         }
 
         .scent-recommendation.fire { border-color: var(--fire-color); }
@@ -285,6 +235,7 @@
             border-color: #e5c338;
         }
 
+        /* 打字機效果 CSS */
         .typing::after {
             content: '|';
             display: inline;
@@ -298,7 +249,289 @@
     </style>
 </head>
 <body>
-    
 
 <div id="app">
-    <div id="intro-section
+    <div class="brand-logo">
+        <img src="https://via.placeholder.com/150x50.png?text=YOUR+LOGO+HERE" alt="Brand Logo">
+    </div>
+
+    <div id="intro-section" class="intro active-section">
+        <h2>探索靈魂的四大元素：你的禪心香氣覺察之旅</h2>
+        <p>在奧修禪卡的智慧中，我們的內在由四大元素構成：火的熱情、水的流動、雲的心智、彩虹的靈性。此刻的你，正被哪一種能量所牽引？這場測驗將引導你進入內在的覺察，透過直覺的選擇，揭示你當下的核心狀態，並找到能滋養這份能量的香氛方向。</p>
+        <button id="start-btn" class="start-btn">開始探索</button>
+    </div>
+
+    <div id="question-section" class="question">
+        <div id="question-text" class="question-title"></div>
+        <div id="options-container" class="question-options"></div>
+    </div>
+
+    <div id="result-section" class="result">
+        <div id="result-content" class="result-content"></div>
+        <div class="result-actions">
+            <button id="restart-btn" class="action-btn">重新探索</button>
+            <button id="share-btn" class="action-btn">分享心靈之旅</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const app = document.getElementById('app');
+        const introSection = document.getElementById('intro-section');
+        const questionSection = document.getElementById('question-section');
+        const resultSection = document.getElementById('result-section');
+        const startBtn = document.getElementById('start-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const shareBtn = document.getElementById('share-btn');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const resultContent = document.getElementById('result-content');
+
+        let currentQuestionIndex = 0;
+        let userChoices = []; 
+        const TYPING_SPEED = 80; // 調整打字速度，數值越大越慢
+
+        const questions = [
+            {
+                text: "1. 在你的內心，你此刻最能感知到的能量是什麼？",
+                options: [
+                    { text: "A. 一股炙熱、充滿活力的能量，像燃燒的火焰。", value: 'fire' },
+                    { text: "B. 一股柔和、充滿情感的能量，像流動的河水。", value: 'water' },
+                    { text: "C. 一股清晰、充滿思考的能量，像飄渺的雲霧。", value: 'cloud' },
+                    { text: "D. 一股溫暖、充滿平靜的能量，像雨後的彩虹。", value: 'rainbow' }
+                ]
+            },
+            {
+                text: "2. 當你身心疲憊時，你的心最需要哪一種聲音？",
+                options: [
+                    { text: "A. 充滿節奏感、鼓舞人心的音樂。", value: 'fire' },
+                    { text: "B. 溫柔安靜、撫慰人心的輕柔音樂。", value: 'water' },
+                    { text: "C. 沒有聲音，只有清晰的思考。", value: 'cloud' },
+                    { text: "D. 寧靜的自然聲響，如風聲與水聲。", value: 'rainbow' }
+                ]
+            },
+            {
+                text: "3. 面對未來的挑戰時，你的心最想如何應對？",
+                options: [
+                    { text: "A. 立刻採取行動，熱情地迎向挑戰。", value: 'fire' },
+                    { text: "B. 順其自然，讓事情自然發展。", value: 'water' },
+                    { text: "C. 仔細分析，制定周密的計畫。", value: 'cloud' },
+                    { text: "D. 保持平靜，相信一切自有安排。", value: 'rainbow' }
+                ]
+            },
+            {
+                text: "4. 如果你的情緒是一片風景，此刻最接近哪一種？",
+                options: [
+                    { text: "A. 熾熱的沙漠，充滿激情。", value: 'fire' },
+                    { text: "B. 寧靜的湖泊，平靜而深邃。", value: 'water' },
+                    { text: "C. 變幻莫測的天空，思緒飛舞。", value: 'cloud' },
+                    { text: "D. 雨後的彩虹，充滿希望。", value: 'rainbow' }
+                ]
+            },
+            {
+                text: "5. 在與人連結時，你目前最渴望的能量是什麼？",
+                options: [
+                    { text: "A. 直接且充滿活力的交流。", value: 'fire' },
+                    { text: "B. 溫柔且充滿同理心的傾聽。", value: 'water' },
+                    { text: "C. 清晰且充滿智慧的對話。", value: 'cloud' },
+                    { text: "D. 無聲且充滿靈性的陪伴。", value: 'rainbow' }
+                ]
+            },
+            {
+                text: "6. 你的內心深處，最想釋放掉的是什麼？",
+                options: [
+                    { text: "A. 缺乏行動力的惰性。", value: 'fire' },
+                    { text: "B. 累積在內心的情緒。", value: 'water' },
+                    { text: "C. 過多的思考與煩惱。", value: 'cloud' },
+                    { text: "D. 對生命的不信任。", value: 'rainbow' }
+                ]
+            }
+        ];
+
+        const results = {
+            'fire': {
+                title: "你，是充滿熱情的行動者。",
+                image: "images/result_fire.png", 
+                analysis: `
+                    <p><strong>你此刻的能量，是『行動』與『熱情』。</strong></p>
+                    <p>你對「火焰」與「熱情」的強烈共鳴，揭示了你內在之火正在燃燒，渴望將想法化為實際行動。這是一個充滿創造與活力的時刻，請相信你的力量，並勇敢地去追求你所渴望的一切。</p>
+                    <p><strong>奧修禪卡要告訴你的：</strong>你是一個天生的領導者與啟動者。不要害怕冒險，你的熱情將會為你開闢新的道路。將這份能量穩穩地扎根，讓它成為你持續前行的動力。</p>
+                `,
+                scent: `
+                    <p><strong>最能滋養你的香氛方向：</strong> <strong>「辛辣、木質與溫暖調」</strong>。這類香調能激發你內在的力量，如陽光般的柑橘與辛辣的香料，能點燃你的熱情；而穩定的木質香，則能幫助你將這份能量穩穩地扎根。</p>
+                `
+            },
+            'water': {
+                title: "你，是平靜而深邃的內省者。",
+                image: "images/result_water.png", 
+                analysis: `
+                    <p><strong>你此刻的能量，是『情感』與『流動』。</strong></p>
+                    <p>你的內在世界如同大海，充滿了情感與直覺。你是一個富有同理心的人，此刻正需要與你的情感連結。放下所有批判，允許自己去感受，你會發現內心的流動將帶給你無限的智慧與平靜。</p>
+                    <p><strong>奧修禪卡要告訴你的：</strong>你的力量來自於你的情感深度。學會信任你的直覺，它將會引導你走向正確的方向。請給自己多一點靜默與獨處的時間，滋養你的內在世界。</p>
+                `,
+                scent: `
+                    <p><strong>最能滋養你的香氛方向：</strong> <strong>「柔和、花香與海洋調」</strong>。這類香調能安撫你的情緒，如溫柔的花香能帶來療癒；而清新的海洋調，則能幫助你擁抱情感的流動，找到內心的平靜。</p>
+                `
+            },
+            'cloud': {
+                title: "你，是充滿智慧的覺察者。",
+                image: "images/result_cloud.png", 
+                analysis: `
+                    <p><strong>你此刻的能量，是『心智』與『覺察』。</strong></p>
+                    <p>你擁有清晰的思維與深刻的洞察力。此刻的你，正需要回到自己的中心，靜心思考，釐清內心的雜訊。這是一個自我覺察的時刻，當你將所有混亂的思緒理清後，將會看見更清晰的道路。</p>
+                    <p><strong>奧修禪卡要告訴你的：</strong>你的心智是你的工具，而不是你的主人。學會觀察而不執著，讓思緒像雲一樣自由飄動，你會發現心靈的空間會變得更寬廣。</p>
+                `,
+                scent: `
+                    <p><strong>最能滋養你的香氛方向：</strong> <strong>「清新、草本與純淨」</strong>。這類香調能淨化你的思緒，如清新的草本香能帶來清明；而純淨的白花香，則能幫助你找到內心的平靜，專注於當下。</p>
+                `
+            },
+            'rainbow': {
+                title: "你，是充滿希望的靈性者。",
+                image: "images/result_rainbow.png", 
+                analysis: `
+                    <p><strong>你此刻的能量，是『靈性』與『新生』。</strong></p>
+                    <p>你正處於一個靈性成長的階段，內在充滿了希望與信任。你相信生命是一個奇蹟，並能從中找到喜悅。這是一個充滿愛的時刻，當你將這份喜悅分享給他人時，你也會得到更多的滋養。</p>
+                    <p><strong>奧修禪卡要告訴你的：</strong>你的存在本身就是一份禮物。當你將內在的喜悅與平靜分享給他人時，你也會得到更多的滋養。信任生命中的每一次安排，因為一切都在朝著美好的方向發展。</p>
+                `,
+                scent: `
+                    <p><strong>最能滋養你的香氛方向：</strong> <strong>「溫暖、甜美與果香調」</strong>。這類香調能呼應你內在的喜悅，如溫暖的果香能帶來甜蜜；而充滿希望感的香氣，則能幫助你將這份能量傳遞出去，與身邊的人分享。</p>
+                `
+            }
+        };
+
+        const sections = {
+            intro: introSection,
+            question: questionSection,
+            result: resultSection
+        };
+
+        // 打字機效果函數
+        const typeWriter = (element, text, delay = TYPING_SPEED) => {
+            let i = 0;
+            element.textContent = '';
+            element.classList.add('typing');
+            return new Promise(resolve => {
+                const interval = setInterval(() => {
+                    if (i < text.length) {
+                        element.textContent += text.charAt(i);
+                        i++;
+                    } else {
+                        clearInterval(interval);
+                        element.classList.remove('typing');
+                        resolve();
+                    }
+                }, delay);
+            });
+        };
+        
+        // 切換頁面函數
+        const switchSection = (current, next) => {
+            sections[current].classList.remove('active-section');
+            setTimeout(() => {
+                sections[current].style.display = 'none';
+                sections[next].style.display = 'flex';
+                sections[next].classList.add('active-section');
+            }, 800);
+        };
+
+        // 啟動測驗
+        startBtn.addEventListener('click', () => {
+            switchSection('intro', 'question');
+            setTimeout(renderQuestion, 900);
+        });
+
+        // 重新啟動測驗
+        restartBtn.addEventListener('click', () => {
+            currentQuestionIndex = 0;
+            userChoices = [];
+            switchSection('result', 'intro');
+        });
+
+        // 分享功能
+        shareBtn.addEventListener('click', () => {
+            const resultTitle = document.querySelector('.result-heading').textContent;
+            const resultText = `我在「${document.title}」測驗中發現了我的靈魂香氣！我的能量是「${resultTitle.replace('你，是', '').replace('。', '')}」，你呢？快來探索你的內在元素吧！`;
+            const shareUrl = window.location.href;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: document.title,
+                    text: resultText,
+                    url: shareUrl,
+                }).then(() => {
+                    console.log('Successfully shared');
+                }).catch((error) => {
+                    console.error('Sharing failed', error);
+                });
+            } else {
+                alert('您的瀏覽器不支持分享功能，請手動複製以下文字分享：\n\n' + resultText + '\n\n' + shareUrl);
+            }
+        });
+
+        // 渲染問題
+        function renderQuestion() {
+            if (currentQuestionIndex < questions.length) {
+                const question = questions[currentQuestionIndex];
+                typeWriter(questionText, question.text).then(() => {
+                    optionsContainer.innerHTML = '';
+                    question.options.forEach(option => {
+                        const button = document.createElement('button');
+                        button.textContent = option.text;
+                        button.classList.add('option-btn');
+                        button.addEventListener('click', () => handleAnswer(option.value));
+                        optionsContainer.appendChild(button);
+                    });
+                });
+            } else {
+                showResult();
+            }
+        }
+
+        // 處理答案
+        function handleAnswer(value) {
+            userChoices.push(value);
+            currentQuestionIndex++;
+            
+            questionSection.style.opacity = 0;
+            setTimeout(() => {
+                renderQuestion();
+                questionSection.style.opacity = 1;
+            }, 500);
+        }
+
+        // 顯示結果
+        function showResult() {
+            const counts = userChoices.reduce((acc, choice) => {
+                acc[choice] = (acc[choice] || 0) + 1;
+                return acc;
+            }, {});
+
+            let dominantTrait = 'rainbow';
+            let maxCount = 0;
+            for (const trait in counts) {
+                if (counts[trait] > maxCount) {
+                    maxCount = counts[trait];
+                    dominantTrait = trait;
+                }
+            }
+            
+            const result = results[dominantTrait];
+            resultContent.innerHTML = `
+                <h2 class="result-heading ${dominantTrait}">${result.title}</h2>
+                <img src="${result.image}" alt="Result Image" class="result-image">
+                ${result.analysis}
+                <div class="scent-recommendation ${dominantTrait}">
+                    ${result.scent}
+                </div>
+            `;
+            
+            switchSection('question', 'result');
+        }
+
+        app.classList.add('visible');
+    });
+</script>
+
+</body>
+</html>
