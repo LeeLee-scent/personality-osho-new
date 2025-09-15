@@ -90,7 +90,7 @@
             opacity: 0.8;
             transition: opacity 0.3s ease;
         }
-        
+
         .leelee-logo img:hover { opacity: 1; }
 
         h1, h2, p, .start-btn {
@@ -245,7 +245,7 @@
         .scent-recommendation.water { border-color: var(--water-color); }
         .scent-recommendation.cloud { border-color: var(--cloud-color); }
         .scent-recommendation.rainbow { border-color: var(--rainbow-color); }
-        
+
         .result-actions {
             margin-top: 30px;
             display: flex;
@@ -300,7 +300,7 @@
 
 <div id="app">
     <div class="leelee-logo">
-        <img src="your-logo.png" alt="LEELEE Brand Logo">
+        <img src="LEELEE.png" alt="LEELEE Brand Logo">
     </div>
 
     <div id="intro-section" class="intro">
@@ -441,161 +441,4 @@
                     <p>你正處於一個靈性成長的階段，內在充滿了希望與信任。你相信生命是一個奇蹟，並能從中找到喜悅。這是一個充滿愛的時刻，當你將這份喜悅分享給他人時，你也會得到更多的滋養。</p>
                 `,
                 scent: `
-                    <p><strong>最能滋養你的香氛方向：</strong> <strong>「溫暖、甜美與果香調」</strong>。這類香調能呼應你內在的喜悅，如溫暖的果香能帶來甜蜜；而充滿希望感的香氣，則能幫助你將這份能量傳遞出去，與身邊的人分享。</p>
-                `
-            }
-        ];
-
-        const sections = {
-            intro: introSection,
-            question: questionSection,
-            result: resultSection
-        };
-
-        const handleDOMContentLoaded = () => {
-            app.classList.add('visible');
-            setTimeout(() => {
-                introSection.classList.add('active-section');
-            }, 500);
-        };
-        document.addEventListener('DOMContentLoaded', handleDOMContentLoaded);
-
-        const typeWriter = (element, text, delay = 80) => {
-            let i = 0;
-            element.textContent = '';
-            element.classList.add('typing');
-            element.style.opacity = 1;
-            return new Promise(resolve => {
-                const interval = setInterval(() => {
-                    if (i < text.length) {
-                        element.textContent += text.charAt(i);
-                        i++;
-                    } else {
-                        clearInterval(interval);
-                        element.classList.remove('typing');
-                        resolve();
-                    }
-                }, delay);
-            });
-        };
-        
-        const switchSection = (current, next) => {
-            if (current) sections[current].classList.remove('active-section');
-            setTimeout(() => {
-                if (current) sections[current].style.display = 'none';
-                sections[next].style.display = 'flex';
-                sections[next].classList.add('active-section');
-            }, 800);
-        };
-
-        startBtn.addEventListener('click', () => {
-            switchSection('intro', 'question');
-            setTimeout(renderQuestion, 900);
-        });
-
-        restartBtn.addEventListener('click', () => {
-            currentQuestionIndex = 0;
-            userChoices = [];
-            switchSection('result', 'intro');
-        });
-
-        shareBtn.addEventListener('click', () => {
-            const resultTitle = document.querySelector('.result-heading').textContent;
-            const resultText = `我在「${document.title}」測驗中發現了我的靈魂香氣！我的能量是「${resultTitle.replace('你，是', '').replace('。', '')}」，你呢？快來探索你的內在元素吧！`;
-            const shareUrl = window.location.href;
-            
-            if (navigator.share) {
-                navigator.share({
-                    title: document.title,
-                    text: resultText,
-                    url: shareUrl,
-                }).then(() => {
-                    console.log('Successfully shared');
-                }).catch((error) => {
-                    console.error('Sharing failed', error);
-                });
-            } else {
-                alert('您的瀏覽器不支持分享功能，請手動複製以下文字分享：\n\n' + resultText + '\n\n' + shareUrl);
-            }
-        });
-
-        function renderQuestion() {
-            if (currentQuestionIndex < questions.length) {
-                const question = questions[currentQuestionIndex];
-                
-                optionsContainer.style.opacity = 0;
-                
-                typeWriter(questionText, question.text).then(() => {
-                    optionsContainer.innerHTML = '';
-                    optionsContainer.style.opacity = 1;
-
-                    question.options.forEach((option, index) => {
-                        const button = document.createElement('button');
-                        button.textContent = option.text;
-                        button.classList.add('option-btn');
-                        button.addEventListener('click', () => handleAnswer(option.value));
-                        optionsContainer.appendChild(button);
-
-                        setTimeout(() => {
-                            button.style.opacity = '1';
-                            button.style.transform = 'translateY(0)';
-                        }, index * 250); 
-                    });
-                });
-            } else {
-                showResult();
-            }
-        }
-
-        function handleAnswer(value) {
-            userChoices.push(value);
-            currentQuestionIndex++;
-            
-            questionSection.classList.remove('active-section');
-            setTimeout(() => {
-                questionSection.style.display = 'none';
-                if (currentQuestionIndex < questions.length) {
-                    questionSection.style.display = 'flex';
-                    questionSection.classList.add('active-section');
-                    renderQuestion();
-                } else {
-                    showResult();
-                }
-            }, 800);
-        }
-
-        function showResult() {
-            const counts = userChoices.reduce((acc, choice) => {
-                acc[choice] = (acc[choice] || 0) + 1;
-                return acc;
-            }, {});
-
-            let dominantTrait = 'rainbow';
-            let maxCount = 0;
-            for (const trait in counts) {
-                if (counts[trait] > maxCount) {
-                    maxCount = counts[trait];
-                    dominantTrait = trait;
-                }
-            }
-            
-            const result = results[dominantTrait];
-            resultContent.innerHTML = `
-                <h2 class="result-heading ${dominantTrait}">${result.title}</h2>
-                <img src="${result.image}" alt="Result Image" class="result-image">
-                ${result.analysis}
-                <div class="scent-recommendation ${dominantTrait}">
-                    ${result.scent}
-                </div>
-            `;
-            
-            switchSection('question', 'result');
-            setTimeout(() => {
-                resultContent.classList.add('is-visible');
-            }, 1000); 
-        }
-    });
-</script>
-
-</body>
-</html>
+                    <p><strong>最能滋養你的香氛方向：</strong> <strong>「溫暖、甜美與果香調」</strong>。這類香調能呼應你內在的喜悅，如溫暖的
