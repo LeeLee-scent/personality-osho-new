@@ -79,6 +79,9 @@
 
         .brand-logo {
             margin-bottom: 20px;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
         }
 
         .brand-logo img {
@@ -111,10 +114,48 @@
             display: flex;
         }
 
+        /* 首頁動畫效果 */
+        #intro-section.active-section .brand-logo {
+            opacity: 1;
+            transform: translateY(0);
+            transition-delay: 0.2s;
+        }
+        #intro-section.active-section h2 {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+            transition-delay: 0.4s;
+        }
+        #intro-section.active-section p {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+            transition-delay: 0.6s;
+        }
+        #intro-section.active-section .start-btn {
+            opacity: 1;
+            animation: bounceIn 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+            animation-delay: 1.0s;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+
         .question-title {
             font-size: 1.6rem;
             margin-bottom: 20px;
             min-height: 50px;
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+        }
+
+        .question-title.is-visible {
+            opacity: 1;
+            transform: translateX(0);
         }
 
         .question-options {
@@ -136,6 +177,9 @@
             transition: background-color 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
             text-align: left;
             backdrop-filter: blur(5px);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
         }
 
         .option-btn:hover {
@@ -152,7 +196,6 @@
             border-radius: 50px;
             font-size: 1.2rem;
             cursor: pointer;
-            transition: transform 0.3s ease, background-color 0.3s ease;
             font-weight: bold;
         }
 
@@ -234,31 +277,19 @@
             background-color: #e5c338;
             border-color: #e5c338;
         }
-
-        /* 打字機效果 CSS */
-        .typing::after {
-            content: '|';
-            display: inline;
-            animation: blink-caret .75s step-end infinite;
-        }
-
-        @keyframes blink-caret {
-            from, to { border-color: transparent }
-            50% { border-color: var(--text-color) }
-        }
     </style>
 </head>
 <body>
 
 <div id="app">
     <div class="brand-logo">
-        <img src="https://via.placeholder.com/150x50.png?text=YOUR+LOGO+HERE" alt="Brand Logo">
+        <img src="images/your-logo.png" alt="Brand Logo">
     </div>
 
     <div id="intro-section" class="intro active-section">
-        <h2>探索靈魂的四大元素：你的禪心香氣覺察之旅</h2>
-        <p>在奧修禪卡的智慧中，我們的內在由四大元素構成：火的熱情、水的流動、雲的心智、彩虹的靈性。此刻的你，正被哪一種能量所牽引？這場測驗將引導你進入內在的覺察，透過直覺的選擇，揭示你當下的核心狀態，並找到能滋養這份能量的香氛方向。</p>
-        <button id="start-btn" class="start-btn">開始探索</button>
+        <h2 style="opacity:0; transform: translateY(20px);">探索靈魂的四大元素：你的禪心香氣覺察之旅</h2>
+        <p style="opacity:0; transform: translateY(20px);">在奧修禪卡的智慧中，我們的內在由四大元素構成：火的熱情、水的流動、雲的心智、彩虹的靈性。此刻的你，正被哪一種能量所牽引？這場測驗將引導你進入內在的覺察，透過直覺的選擇，揭示你當下的核心狀態，並找到能滋養這份能量的香氛方向。</p>
+        <button id="start-btn" class="start-btn" style="opacity:0;">開始探索</button>
     </div>
 
     <div id="question-section" class="question">
@@ -290,7 +321,12 @@
 
         let currentQuestionIndex = 0;
         let userChoices = []; 
-        const TYPING_SPEED = 80; // 調整打字速度，數值越大越慢
+        
+        const sections = {
+            intro: introSection,
+            question: questionSection,
+            result: resultSection
+        };
 
         const questions = [
             {
@@ -400,32 +436,7 @@
             }
         };
 
-        const sections = {
-            intro: introSection,
-            question: questionSection,
-            result: resultSection
-        };
-
-        // 打字機效果函數
-        const typeWriter = (element, text, delay = TYPING_SPEED) => {
-            let i = 0;
-            element.textContent = '';
-            element.classList.add('typing');
-            return new Promise(resolve => {
-                const interval = setInterval(() => {
-                    if (i < text.length) {
-                        element.textContent += text.charAt(i);
-                        i++;
-                    } else {
-                        clearInterval(interval);
-                        element.classList.remove('typing');
-                        resolve();
-                    }
-                }, delay);
-            });
-        };
-        
-        // 切換頁面函數
+        // 頁面切換效果
         const switchSection = (current, next) => {
             sections[current].classList.remove('active-section');
             setTimeout(() => {
@@ -434,7 +445,7 @@
                 sections[next].classList.add('active-section');
             }, 800);
         };
-
+        
         // 啟動測驗
         startBtn.addEventListener('click', () => {
             switchSection('intro', 'question');
@@ -473,15 +484,23 @@
         function renderQuestion() {
             if (currentQuestionIndex < questions.length) {
                 const question = questions[currentQuestionIndex];
-                typeWriter(questionText, question.text).then(() => {
-                    optionsContainer.innerHTML = '';
-                    question.options.forEach(option => {
-                        const button = document.createElement('button');
-                        button.textContent = option.text;
-                        button.classList.add('option-btn');
-                        button.addEventListener('click', () => handleAnswer(option.value));
-                        optionsContainer.appendChild(button);
-                    });
+                questionText.textContent = question.text;
+                questionText.classList.remove('is-visible');
+                void questionText.offsetWidth; // 觸發重繪
+                questionText.classList.add('is-visible');
+                
+                optionsContainer.innerHTML = '';
+                question.options.forEach((option, index) => {
+                    const button = document.createElement('button');
+                    button.textContent = option.text;
+                    button.classList.add('option-btn');
+                    button.style.transitionDelay = `${index * 0.15 + 0.5}s`;
+                    button.addEventListener('click', () => handleAnswer(option.value));
+                    optionsContainer.appendChild(button);
+                    setTimeout(() => {
+                        button.style.opacity = '1';
+                        button.style.transform = 'translateY(0)';
+                    }, index * 150 + 100);
                 });
             } else {
                 showResult();
@@ -493,11 +512,17 @@
             userChoices.push(value);
             currentQuestionIndex++;
             
-            questionSection.style.opacity = 0;
+            questionSection.classList.remove('active-section');
             setTimeout(() => {
-                renderQuestion();
-                questionSection.style.opacity = 1;
-            }, 500);
+                questionSection.style.display = 'none';
+                if (currentQuestionIndex < questions.length) {
+                    questionSection.style.display = 'flex';
+                    questionSection.classList.add('active-section');
+                    renderQuestion();
+                } else {
+                    showResult();
+                }
+            }, 800);
         }
 
         // 顯示結果
