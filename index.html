@@ -15,7 +15,7 @@
             --text-color: #333;
             --bg-color: #f7f3e9;
             --transition-duration: 0.8s;
-            --container-bg-color: rgba(255, 255, 255, 0.8); /* 半透明背景 */
+            --container-bg-color: rgba(255, 255, 255, 0.8);
         }
 
         body {
@@ -34,7 +34,6 @@
             position: relative;
         }
 
-        /* 模擬背景動態效果 */
         body::before {
             content: '';
             position: absolute;
@@ -83,7 +82,7 @@
         }
 
         .brand-logo img {
-            max-width: 150px; /* 調整為您的 Logo 尺寸 */
+            max-width: 150px;
             height: auto;
             opacity: 0.8;
             transition: opacity 0.3s ease;
@@ -115,6 +114,7 @@
         .question-title {
             font-size: 1.6rem;
             margin-bottom: 20px;
+            min-height: 50px; /* 防止打字機效果時的畫面跳動 */
         }
 
         .question-options {
@@ -234,6 +234,18 @@
             background-color: #e5c338;
             border-color: #e5c338;
         }
+
+        /* 打字機效果 CSS */
+        .typing::after {
+            content: '|';
+            display: inline;
+            animation: blink-caret .75s step-end infinite;
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: var(--text-color) }
+        }
     </style>
 </head>
 <body>
@@ -339,7 +351,7 @@
         const results = {
             'fire': {
                 title: "你，是充滿熱情的行動者。",
-                image: "images/result_fire.png", // **請替換為您的圖片路徑**
+                image: "images/result_fire.png", 
                 analysis: `
                     <p><strong>你此刻的能量，是『行動』與『熱情』。</strong></p>
                     <p>你對「火焰」與「熱情」的強烈共鳴，揭示了你內在之火正在燃燒，渴望將想法化為實際行動。這是一個充滿創造與活力的時刻，請相信你的力量，並勇敢地去追求你所渴望的一切。</p>
@@ -351,7 +363,7 @@
             },
             'water': {
                 title: "你，是平靜而深邃的內省者。",
-                image: "images/result_water.png", // **請替換為您的圖片路徑**
+                image: "images/result_water.png", 
                 analysis: `
                     <p><strong>你此刻的能量，是『情感』與『流動』。</strong></p>
                     <p>你的內在世界如同大海，充滿了情感與直覺。你是一個富有同理心的人，此刻正需要與你的情感連結。放下所有批判，允許自己去感受，你會發現內心的流動將帶給你無限的智慧與平靜。</p>
@@ -363,7 +375,7 @@
             },
             'cloud': {
                 title: "你，是充滿智慧的覺察者。",
-                image: "images/result_cloud.png", // **請替換為您的圖片路徑**
+                image: "images/result_cloud.png", 
                 analysis: `
                     <p><strong>你此刻的能量，是『心智』與『覺察』。</strong></p>
                     <p>你擁有清晰的思維與深刻的洞察力。此刻的你，正需要回到自己的中心，靜心思考，釐清內心的雜訊。這是一個自我覺察的時刻，當你將所有混亂的思緒理清後，將會看見更清晰的道路。</p>
@@ -375,7 +387,7 @@
             },
             'rainbow': {
                 title: "你，是充滿希望的靈性者。",
-                image: "images/result_rainbow.png", // **請替換為您的圖片路徑**
+                image: "images/result_rainbow.png", 
                 analysis: `
                     <p><strong>你此刻的能量，是『靈性』與『新生』。</strong></p>
                     <p>你正處於一個靈性成長的階段，內在充滿了希望與信任。你相信生命是一個奇蹟，並能從中找到喜悅。這是一個充滿愛的時刻，當你將這份喜悅分享給他人時，你也會得到更多的滋養。</p>
@@ -387,29 +399,52 @@
             }
         };
 
+        const sections = {
+            intro: introSection,
+            question: questionSection,
+            result: resultSection
+        };
+
+        // 打字機效果函數
+        const typeWriter = (element, text, delay = 50) => {
+            let i = 0;
+            element.textContent = '';
+            element.classList.add('typing');
+            const interval = setInterval(() => {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(interval);
+                    element.classList.remove('typing');
+                }
+            }, delay);
+        };
+        
+        // 切換頁面函數
+        const switchSection = (current, next) => {
+            sections[current].classList.remove('active-section');
+            setTimeout(() => {
+                sections[current].style.display = 'none';
+                sections[next].style.display = 'flex';
+                sections[next].classList.add('active-section');
+            }, 800);
+        };
+
         // 啟動測驗
         startBtn.addEventListener('click', () => {
-            introSection.classList.remove('active-section');
-            setTimeout(() => {
-                introSection.style.display = 'none';
-                questionSection.classList.add('active-section');
-                renderQuestion();
-            }, 800);
+            switchSection('intro', 'question');
+            setTimeout(renderQuestion, 900);
         });
 
         // 重新啟動測驗
         restartBtn.addEventListener('click', () => {
             currentQuestionIndex = 0;
             userChoices = [];
-            resultSection.classList.remove('active-section');
-            setTimeout(() => {
-                resultSection.style.display = 'none';
-                introSection.classList.add('active-section');
-                introSection.style.display = 'flex';
-            }, 800);
+            switchSection('result', 'intro');
         });
 
-        // 分享功能 (可根據您的需求調整)
+        // 分享功能
         shareBtn.addEventListener('click', () => {
             const resultText = `我在「${document.title}」測驗中發現了我的靈魂香氣！我的能量是「${document.querySelector('.result-heading').textContent.replace('你，是', '').replace('。', '')}」，你呢？快來探索你的內在元素吧！`;
             const shareUrl = window.location.href;
@@ -433,7 +468,7 @@
         function renderQuestion() {
             if (currentQuestionIndex < questions.length) {
                 const question = questions[currentQuestionIndex];
-                questionText.textContent = question.text;
+                typeWriter(questionText, question.text);
                 optionsContainer.innerHTML = '';
                 question.options.forEach(option => {
                     const button = document.createElement('button');
@@ -476,21 +511,25 @@
             }
             
             const result = results[dominantTrait];
-            const html = `
-                <h2 class="result-heading ${dominantTrait}">${result.title}</h2>
+            resultContent.innerHTML = `
+                <h2 class="result-heading ${dominantTrait}"></h2>
                 <img src="${result.image}" alt="Result Image" class="result-image">
-                ${result.analysis}
+                <div class="result-analysis-text"></div>
                 <div class="scent-recommendation ${dominantTrait}">
-                    ${result.scent}
+                    <div class="scent-recommendation-text"></div>
                 </div>
             `;
             
-            questionSection.classList.remove('active-section');
+            const resultHeading = resultContent.querySelector('.result-heading');
+            const resultAnalysisText = resultContent.querySelector('.result-analysis-text');
+            const scentRecommendationText = resultContent.querySelector('.scent-recommendation-text');
+
+            switchSection('question', 'result');
             setTimeout(() => {
-                questionSection.style.display = 'none';
-                resultSection.classList.add('active-section');
-                resultContent.innerHTML = html;
-            }, 800);
+                typeWriter(resultHeading, result.title);
+                setTimeout(() => typeWriter(resultAnalysisText, result.analysis.trim()), result.title.length * 50 + 500);
+                setTimeout(() => typeWriter(scentRecommendationText, result.scent.trim()), result.title.length * 50 + result.analysis.length * 50 + 1000);
+            }, 900);
         }
 
         app.classList.add('visible');
