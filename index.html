@@ -91,7 +91,7 @@
             opacity: 0.8;
             transition: opacity 0.3s ease;
         }
-
+        
         .leelee-logo img:hover { opacity: 1; }
 
         h1, h2, p, .start-btn {
@@ -246,7 +246,7 @@
         .scent-recommendation.water { border-color: var(--water-color); }
         .scent-recommendation.cloud { border-color: var(--cloud-color); }
         .scent-recommendation.rainbow { border-color: var(--rainbow-color); }
-
+        
         .result-actions {
             margin-top: 30px;
             display: flex;
@@ -445,7 +445,7 @@
                     <p><strong>最能滋養你的香氛方向：</strong> <strong>「溫暖、甜美與果香調」</strong>。這類香調能呼應你內在的喜悅，如溫暖的果香能帶來甜蜜；而充滿希望感的香氣，則能幫助你將這份能量傳遞出去，與身邊的人分享。</p>
                 `
             }
-        ];
+        };
 
         const sections = {
             intro: introSection,
@@ -479,7 +479,7 @@
                 }, delay);
             });
         };
-
+        
         const switchSection = (current, next) => {
             if (current) sections[current].classList.remove('active-section');
             setTimeout(() => {
@@ -504,7 +504,7 @@
             const resultTitle = document.querySelector('.result-heading').textContent;
             const resultText = `我在「${document.title}」測驗中發現了我的靈魂香氣！我的能量是「${resultTitle.replace('你，是', '').replace('。', '')}」，你呢？快來探索你的內在元素吧！`;
             const shareUrl = window.location.href;
-
+            
             if (navigator.share) {
                 navigator.share({
                     title: document.title,
@@ -523,9 +523,9 @@
         function renderQuestion() {
             if (currentQuestionIndex < questions.length) {
                 const question = questions[currentQuestionIndex];
-
+                
                 optionsContainer.style.opacity = 0;
-
+                
                 typeWriter(questionText, question.text).then(() => {
                     optionsContainer.innerHTML = '';
                     optionsContainer.style.opacity = 1;
@@ -551,7 +551,7 @@
         function handleAnswer(value) {
             userChoices.push(value);
             currentQuestionIndex++;
-
+            
             questionSection.classList.remove('active-section');
             setTimeout(() => {
                 questionSection.style.display = 'none';
@@ -579,7 +579,7 @@
                     dominantTrait = trait;
                 }
             }
-
+            
             const result = results[dominantTrait];
             resultContent.innerHTML = `
                 <h2 class="result-heading ${dominantTrait}">${result.title}</h2>
@@ -589,7 +589,7 @@
                     ${result.scent}
                 </div>
             `;
-
+            
             switchSection('question', 'result');
             setTimeout(() => {
                 resultContent.classList.add('is-visible');
