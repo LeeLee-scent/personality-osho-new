@@ -8,7 +8,6 @@
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap');
 
         :root {
-            /* 調整為更沉穩、溫和的禪風色調 */
             --fire-color: #D37C5A;    /* 暖陶色 */
             --water-color: #8DA4BE;  /* 靜湖藍 */
             --cloud-color: #B0B0B0;  /* 岩灰色 */
@@ -33,7 +32,7 @@
             letter-spacing: 0.5px;
             overflow: hidden;
             position: relative;
-            background: linear-gradient(135deg, #EAE7E0, #DCD8CF); /* 初始背景漸層 */
+            background: linear-gradient(135deg, #EAE7E0, #DCD8CF);
             transition: background var(--transition-duration) ease-in-out;
         }
 
@@ -42,7 +41,7 @@
             position: absolute;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background-image: url('images/bg_intro.jpg'); /* 初始背景圖 */
+            background-image: url('images/bg_intro.jpg');
             background-size: cover;
             background-position: center;
             filter: blur(5px) brightness(1.05);
@@ -60,7 +59,7 @@
             background-color: var(--container-bg-color);
             backdrop-filter: blur(12px);
             border-radius: 20px;
-            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08); /* 柔和陰影 */
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
             max-width: 800px;
             width: 100%;
             padding: 40px;
@@ -119,7 +118,7 @@
             transform: translateY(-3px);
             border-color: var(--text-color);
         }
-        .option-btn:active { transform: scale(0.98); } /* 新增點擊回饋 */
+        .option-btn:active { transform: scale(0.98); }
 
         .start-btn {
             background-color: var(--rainbow-color);
@@ -131,7 +130,7 @@
 
         .result-image {
             max-width: 100%; height: auto; border-radius: 10px; margin-bottom: 20px;
-            animation: fadeInBreath 2s ease-in-out; /* 新增圖片動畫 */
+            animation: fadeInBreath 2s ease-in-out;
         }
         @keyframes fadeInBreath {
             from { opacity: 0; transform: scale(0.98); }
@@ -161,12 +160,11 @@
         #restart-btn { background-color: transparent; color: var(--text-color); border-color: var(--text-color); }
         #restart-btn:hover { background-color: var(--text-color); color: #fff; }
         #share-btn { background-color: var(--rainbow-color); color: var(--text-color); border-color: var(--rainbow-color); }
-        #share-btn:hover { background-color: #d4b97a; border-color: #d4b97a; }
+        #share-btn:hover { background-color: var(--rainbow-color); border-color: #d4b97a; }
 
         .typing::after { content: '|'; display: inline; animation: blink-caret .75s step-end infinite; }
         @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: var(--text-color) } }
 
-        /* RWD 強化 */
         @media (max-width: 600px) {
             #app { padding: 25px; }
             .question-title { font-size: 1.3rem; }
@@ -214,7 +212,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const optionsContainer = document.getElementById('options-container');
     const resultContent = document.getElementById('result-content');
     const body = document.body;
-    const bodyBefore = window.getComputedStyle(body, '::before');
 
     let currentQuestionIndex = 0;
     let userChoices = [];
@@ -232,9 +229,14 @@ document.addEventListener('DOMContentLoaded', () => {
         'tie': { title: "你，是內心豐盛的平衡者。", image: "images/result_tie.png", bg: "images/bg_tie.jpg", analysis: `<p><strong>你此刻的能量，是『和諧』與『完整』。</strong></p><p>你的內在並未被單一元素所主導，而是呈現出一種多元而平衡的豐盛狀態。如同一個完整的生態系，火的熱情、水的溫柔、雲的清明與彩虹的靈性在你心中和諧共存。這是一個充滿潛能的時刻，代表你有能力整合內在的不同面向，活出更完整的自己。</p><p><strong>奧修禪卡要告訴你的：</strong>你的力量來自於你的包容性與整合能力。不必急於定義自己，去享受這份內在的豐富。當你需要時，你可以任意調用不同元素的能量來應對生命的課題。</p>`, scent: `<p><strong>最能滋養你的香氛方向：</strong> <strong>「複合、層次豐富的東方調或森林調」</strong>。這類香調融合了多種香氣元素，既有木質的沉穩，又有香料的溫暖和花草的清新，完美呼應你內在多元而和諧的狀態。</p>` }
     };
 
+    const sections = {
+        intro: introSection,
+        question: questionSection,
+        result: resultSection
+    };
+
     // 切換頁面函數
     const switchSection = (current, next) => {
-        const sections = { 'intro': introSection, 'question': questionSection, 'result': resultSection };
         sections[current].classList.remove('active-section');
         setTimeout(() => {
             sections[current].style.display = 'none';
@@ -243,25 +245,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 800);
     };
 
-    // 開始測驗
     startBtn.addEventListener('click', () => {
         switchSection('intro', 'question');
         setTimeout(renderQuestion, 900);
     });
 
-    // 重新測驗
     restartBtn.addEventListener('click', () => {
         currentQuestionIndex = 0;
         userChoices = [];
-        // 背景淡出回初始狀態
-        body.style.setProperty('--bg-image', `url('images/bg_intro.jpg')`);
-        body.style.background = 'linear-gradient(135deg, #EAE7E0, #DCD8CF)';
         document.querySelector('body::before').style.backgroundImage = `url('images/bg_intro.jpg')`;
-
         switchSection('result', 'intro');
     });
-    
-    // 分享功能
+
     shareBtn.addEventListener('click', () => {
         const resultTitle = document.querySelector('.result-heading').textContent;
         const resultText = `我在「${document.title}」中，發現我的內在元素是「${resultTitle.replace('你，是', '').replace('。', '')}」！你也來探索你的靈魂香氣吧！ #禪心香氣覺察之旅 #我的內在元素`;
@@ -273,7 +268,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 渲染問題
     function renderQuestion() {
         if (currentQuestionIndex < questions.length) {
             const question = questions[currentQuestionIndex];
@@ -284,7 +278,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 return new Promise(resolve => {
                     const interval = setInterval(() => {
                         if (i < text.length) {
-                            element.innerHTML += text.charAt(i); i++;
+                            element.innerHTML += text.charAt(i);
+                            i++;
                         } else {
                             clearInterval(interval);
                             element.classList.remove('typing');
@@ -308,7 +303,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 處理答案
     function handleAnswer(value) {
         userChoices.push(value);
         currentQuestionIndex++;
@@ -319,7 +313,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 500);
     }
 
-    // 顯示結果 (含平手邏輯)
     function showResult() {
         const counts = userChoices.reduce((acc, choice) => {
             acc[choice] = (acc[choice] || 0) + 1;
@@ -339,7 +332,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const result = results[finalTrait];
         
-        // 改變背景
         document.querySelector('body::before').style.backgroundImage = `url('${result.bg}')`;
 
         resultContent.innerHTML = `
