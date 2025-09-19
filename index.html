@@ -9,13 +9,13 @@
 
         :root {
             /* 調整為更沉穩、溫和的禪風色調 */
-            --fire-color: #D37C5A;   /* 暖陶色 */
+            --fire-color: #D37C5A;    /* 暖陶色 */
             --water-color: #8DA4BE;  /* 靜湖藍 */
             --cloud-color: #B0B0B0;  /* 岩灰色 */
             --rainbow-color: #E0C88B;/* 沙金色 */
-            --tie-color: #9B9B9B;     /* 平衡灰 */
-            --text-color: #4A4A4A;   /* 深炭灰 */
-            --bg-color: #F5F1E9;     /* 米白色 */
+            --tie-color: #9B9B9B;      /* 平衡灰 */
+            --text-color: #4A4A4A;    /* 深炭灰 */
+            --bg-color: #F5F1E9;      /* 米白色 */
             --transition-duration: 0.8s;
             --container-bg-color: rgba(245, 241, 233, 0.85); /* 帶透明度的米白 */
         }
@@ -201,8 +201,6 @@
     </div>
 </div>
 
-<audio id="click-sound" src="sounds/click.mp3" preload="auto"></audio>
-
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const app = document.getElementById('app');
@@ -218,15 +216,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const body = document.body;
     const bodyBefore = window.getComputedStyle(body, '::before');
 
-    // 音效
-    const clickSound = document.getElementById('click-sound');
-
     let currentQuestionIndex = 0;
     let userChoices = [];
     const TYPING_SPEED = 70;
 
     const questions = [
-        // ... (問題內容與原版相同，此處省略以節省篇幅) ...
         { text: "1. 在你的內心，你此刻最能感知到的能量是什麼？", options: [ { text: "A. 一股炙熱、充滿活力的能量，像燃燒的火焰。", value: 'fire' }, { text: "B. 一股柔和、充滿情感的能量，像流動的河水。", value: 'water' }, { text: "C. 一股清晰、充滿思考的能量，像飄渺的雲霧。", value: 'cloud' }, { text: "D. 一股溫暖、充滿平靜的能量，像雨後的彩虹。", value: 'rainbow' } ] }, { text: "2. 當你身心疲憊時，你的心最需要哪一種聲音？", options: [ { text: "A. 充滿節奏感、鼓舞人心的音樂。", value: 'fire' }, { text: "B. 溫柔安靜、撫慰人心的輕柔音樂。", value: 'water' }, { text: "C. 沒有聲音，只有清晰的思考。", value: 'cloud' }, { text: "D. 寧靜的自然聲響，如風聲與水聲。", value: 'rainbow' } ] }, { text: "3. 面對未來的挑戰時，你的心最想如何應對？", options: [ { text: "A. 立刻採取行動，熱情地迎向挑戰。", value: 'fire' }, { text: "B. 順其自然，讓事情自然發展。", value: 'water' }, { text: "C. 仔細分析，制定周密的計畫。", value: 'cloud' }, { text: "D. 保持平靜，相信一切自有安排。", value: 'rainbow' } ] }, { text: "4. 如果你的情緒是一片風景，此刻最接近哪一種？", options: [ { text: "A. 熾熱的沙漠，充滿激情。", value: 'fire' }, { text: "B. 寧靜的湖泊，平靜而深邃。", value: 'water' }, { text: "C. 變幻莫測的天空，思緒飛舞。", value: 'cloud' }, { text: "D. 雨後的彩虹，充滿希望。", value: 'rainbow' } ] }, { text: "5. 在與人連結時，你目前最渴望的能量是什麼？", options: [ { text: "A. 直接且充滿活力的交流。", value: 'fire' }, { text: "B. 溫柔且充滿同理心的傾聽。", value: 'water' }, { text: "C. 清晰且充滿智慧的對話。", value: 'cloud' }, { text: "D. 無聲且充滿靈性的陪伴。", value: 'rainbow' } ] }, { text: "6. 你的內心深處，最想釋放掉的是什麼？", options: [ { text: "A. 缺乏行動力的惰性。", value: 'fire' }, { text: "B. 累積在內心的情緒。", value: 'water' }, { text: "C. 過多的思考與煩惱。", value: 'cloud' }, { text: "D. 對生命的不信任。", value: 'rainbow' } ] }
     ];
 
@@ -238,14 +232,9 @@ document.addEventListener('DOMContentLoaded', () => {
         'tie': { title: "你，是內心豐盛的平衡者。", image: "images/result_tie.png", bg: "images/bg_tie.jpg", analysis: `<p><strong>你此刻的能量，是『和諧』與『完整』。</strong></p><p>你的內在並未被單一元素所主導，而是呈現出一種多元而平衡的豐盛狀態。如同一個完整的生態系，火的熱情、水的溫柔、雲的清明與彩虹的靈性在你心中和諧共存。這是一個充滿潛能的時刻，代表你有能力整合內在的不同面向，活出更完整的自己。</p><p><strong>奧修禪卡要告訴你的：</strong>你的力量來自於你的包容性與整合能力。不必急於定義自己，去享受這份內在的豐富。當你需要時，你可以任意調用不同元素的能量來應對生命的課題。</p>`, scent: `<p><strong>最能滋養你的香氛方向：</strong> <strong>「複合、層次豐富的東方調或森林調」</strong>。這類香調融合了多種香氣元素，既有木質的沉穩，又有香料的溫暖和花草的清新，完美呼應你內在多元而和諧的狀態。</p>` }
     };
 
-    // 播放音效函數
-    function playSound(sound) {
-        sound.currentTime = 0;
-        sound.play().catch(e => console.log("音效播放被瀏覽器阻止。"));
-    }
-
     // 切換頁面函數
     const switchSection = (current, next) => {
+        const sections = { 'intro': introSection, 'question': questionSection, 'result': resultSection };
         sections[current].classList.remove('active-section');
         setTimeout(() => {
             sections[current].style.display = 'none';
@@ -256,14 +245,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 開始測驗
     startBtn.addEventListener('click', () => {
-        playSound(clickSound);
         switchSection('intro', 'question');
         setTimeout(renderQuestion, 900);
     });
 
     // 重新測驗
     restartBtn.addEventListener('click', () => {
-        playSound(clickSound);
         currentQuestionIndex = 0;
         userChoices = [];
         // 背景淡出回初始狀態
@@ -276,7 +263,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // 分享功能
     shareBtn.addEventListener('click', () => {
-        playSound(clickSound);
         const resultTitle = document.querySelector('.result-heading').textContent;
         const resultText = `我在「${document.title}」中，發現我的內在元素是「${resultTitle.replace('你，是', '').replace('。', '')}」！你也來探索你的靈魂香氣吧！ #禪心香氣覺察之旅 #我的內在元素`;
         const shareUrl = window.location.href;
@@ -324,7 +310,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 處理答案
     function handleAnswer(value) {
-        playSound(clickSound);
         userChoices.push(value);
         currentQuestionIndex++;
         questionSection.style.opacity = 0;
