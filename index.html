@@ -61,14 +61,6 @@
             width: 100%;
             padding: 40px;
             text-align: center;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity var(--transition-duration) ease-out, transform var(--transition-duration) ease-out;
-        }
-        
-        #app.visible {
-            opacity: 1;
-            transform: translateY(0);
         }
 
         .brand-logo img {
@@ -83,8 +75,6 @@
         h1, h2 { font-weight: 700; color: var(--text-color); }
 
         .intro, .question, .result {
-            opacity: 0;
-            transition: opacity var(--transition-duration) ease-in-out;
             min-height: 400px;
             display: none;
             flex-direction: column;
@@ -92,7 +82,27 @@
             align-items: center;
         }
 
-        .active-section { opacity: 1; display: flex; }
+        .intro {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+
+        .intro.active-section {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .question, .result {
+            opacity: 0;
+            transition: opacity var(--transition-duration) ease-in-out;
+        }
+
+        .question.active-section, .result.active-section {
+            display: flex;
+            opacity: 1;
+        }
 
         .question-title { font-size: 1.6rem; margin-bottom: 20px; min-height: 50px; }
 
@@ -130,8 +140,8 @@
             transform: scale(0.95);
             transition: opacity 1.2s ease, transform 1.2s ease;
         }
-
-        .result-content.visible {
+        
+        .result.active-section .result-content {
             opacity: 1;
             transform: scale(1);
         }
@@ -178,7 +188,7 @@
         <img src="https://via.placeholder.com/150x50.png?text=YOUR+LOGO+HERE" alt="Brand Logo">
     </div>
 
-    <div id="intro-section" class="intro active-section">
+    <div id="intro-section" class="intro">
         <h2>探索靈魂的四大元素：你的禪心香氣覺察之旅</h2>
         <p>在奧修禪卡的智慧中，我們的內在由四大元素構成：火的熱情、水的流動、雲的心智、彩虹的靈性。此刻的你，正被哪一種能量所牽引？這場測驗將引導你進入內在的覺察，透過直覺的選擇，揭示你當下的核心狀態，並找到能滋養這份能量的香氛方向。</p>
         <button id="start-btn" class="start-btn">開始探索</button>
@@ -241,9 +251,6 @@ document.addEventListener('DOMContentLoaded', () => {
             sections[next].style.display = 'flex';
             setTimeout(() => {
                 sections[next].classList.add('active-section');
-                if (next === 'result') {
-                    resultContent.classList.add('visible');
-                }
             }, 50);
         }, 800);
     };
@@ -288,7 +295,6 @@ document.addEventListener('DOMContentLoaded', () => {
     restartBtn.addEventListener('click', () => {
         currentQuestionIndex = 0;
         userChoices = [];
-        resultContent.classList.remove('visible'); // 在切換回首頁前移除結果的動畫類
         updateBackgroundGradient('intro');
         switchSection('result', 'intro');
     });
@@ -384,10 +390,10 @@ document.addEventListener('DOMContentLoaded', () => {
         switchSection('question', 'result');
     }
 
-    // 微調，讓 #app 在網頁載入時有淡入動畫
+    // 頁面載入後，顯示首頁動畫
     setTimeout(() => {
-        app.classList.add('visible');
-    }, 50);
+        introSection.classList.add('active-section');
+    }, 100);
 });
 </script>
 </body>
