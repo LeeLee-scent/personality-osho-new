@@ -131,11 +131,11 @@
             transition: opacity 1.2s ease, transform 1.2s ease;
         }
 
-        .result-section.active-section .result-content {
+        .result-content.visible {
             opacity: 1;
             transform: scale(1);
         }
-
+        
         .result-heading.fire { color: var(--fire-color); }
         .result-heading.water { color: var(--water-color); }
         .result-heading.cloud { color: var(--cloud-color); }
@@ -239,7 +239,12 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             sections[current].style.display = 'none';
             sections[next].style.display = 'flex';
-            setTimeout(() => sections[next].classList.add('active-section'), 50);
+            setTimeout(() => {
+                sections[next].classList.add('active-section');
+                if (next === 'result') {
+                    resultContent.classList.add('visible');
+                }
+            }, 50);
         }, 800);
     };
 
@@ -283,6 +288,7 @@ document.addEventListener('DOMContentLoaded', () => {
     restartBtn.addEventListener('click', () => {
         currentQuestionIndex = 0;
         userChoices = [];
+        resultContent.classList.remove('visible'); // 在切換回首頁前移除結果的動畫類
         updateBackgroundGradient('intro');
         switchSection('result', 'intro');
     });
@@ -337,7 +343,6 @@ document.addEventListener('DOMContentLoaded', () => {
         userChoices.push(value);
         currentQuestionIndex++;
         
-        // 確保問題和選項在下一個問題出現時被清空
         questionSection.style.opacity = 0;
         optionsContainer.innerHTML = '';
         
@@ -379,7 +384,10 @@ document.addEventListener('DOMContentLoaded', () => {
         switchSection('question', 'result');
     }
 
-    app.classList.add('visible');
+    // 微調，讓 #app 在網頁載入時有淡入動畫
+    setTimeout(() => {
+        app.classList.add('visible');
+    }, 50);
 });
 </script>
 </body>
