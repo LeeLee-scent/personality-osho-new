@@ -125,14 +125,17 @@
         }
         .start-btn:hover { transform: scale(1.05); background-color: #d4b97a; }
 
-        .result-image {
-            max-width: 100%; height: auto; border-radius: 10px; margin-bottom: 20px;
-            animation: fadeInBreath 2s ease-in-out;
+        .result-content {
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 1.2s ease, transform 1.2s ease;
         }
-        @keyframes fadeInBreath {
-            from { opacity: 0; transform: scale(0.98); }
-            to { opacity: 1; transform: scale(1); }
+
+        .result-section.active-section .result-content {
+            opacity: 1;
+            transform: scale(1);
         }
+
         .result-heading.fire { color: var(--fire-color); }
         .result-heading.water { color: var(--water-color); }
         .result-heading.cloud { color: var(--cloud-color); }
@@ -333,9 +336,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleAnswer(value) {
         userChoices.push(value);
         currentQuestionIndex++;
+        
+        // 確保問題和選項在下一個問題出現時被清空
         questionSection.style.opacity = 0;
+        optionsContainer.innerHTML = '';
+        
         setTimeout(() => {
-            optionsContainer.innerHTML = '';
             renderQuestion();
             questionSection.style.opacity = 1;
         }, 500);
